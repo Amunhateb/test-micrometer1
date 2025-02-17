@@ -1,0 +1,44 @@
+spring:
+  application:
+    name: test-micrometer1
+management:
+  metrics:
+    distribution:
+      percentiles:
+        http:
+          server:
+            requests: 0.75, 0.95, 0.99
+          client:
+            requests: 0.75, 0.95, 0.99
+      percentiles-histogram:
+        http:
+          server:
+            requests: true
+      slo:
+        http:
+          server:
+            requests: 100ms,250ms,500ms,1s
+    tags:
+      service: ${spring.application.name}
+  server:
+    add-application-context-header: true
+  endpoints:
+    enabled-by-default: false
+    web:
+      exposure:
+        include: info, health, restart, shutdown, prometheus
+      path-mapping:
+        info: actuator/info
+        health: actuator/health
+        restart: actuator/restart
+        prometheus: metrics
+      base-path: /
+  endpoint:
+    info:
+      enabled: true
+    health:
+      enabled: true
+    restart:
+      enabled: true
+    prometheus:
+      enabled: true
